@@ -30,12 +30,13 @@ namespace RestaurantNamespace
     else
     {
       Restaurant newRestaurant = (Restaurant) otherRestaurant;
+      bool idEquality = this.getID() == newRestaurant.getID();
       bool nameEquality = this.getName() == newRestaurant.getName();
       bool addressEquality = this.getAddress() == newRestaurant.getAddress();
       bool phoneNumberEquality = this.getPhoneNumber() == newRestaurant.getPhoneNumber();
       bool cuisineIdEquality = this.getCusineId() == newRestaurant.getCusineId();
 
-      return (nameEquality && addressEquality && phoneNumberEquality && cuisineIdEquality);
+      return (idEquality && nameEquality && addressEquality && phoneNumberEquality && cuisineIdEquality);
     }
   }
 
@@ -122,34 +123,75 @@ namespace RestaurantNamespace
   {
     List<Restaurant> allRestaurants = new List<Restaurant>{};
 
+    SqlConnection conn = DB.Connection();
+    SqlDataReader rdr = null;
+    conn.Open();
+    SqlCommand cmd = new SqlCommand("SELECT * FROM restaurant;", conn);
+          rdr = cmd.ExecuteReader();
+
+    while(rdr.Read())
+    {
+      int restaurantId = rdr.GetInt32(0);
+      string name = rdr.GetString(1);
+      string address = rdr.GetString(2);
+      string phoneNumber = rdr.GetString(3);
+      int cusineId = rdr.GetInt32(4);
+      Restaurant newRestaurant = new Restaurant(name, address, phoneNumber, cusineId, restaurantId);
+      allRestaurants.Add(newRestaurant);
+    }
+
+    if (rdr != null)
+    {
+      rdr.Close();
+    }
+    if (conn != null)
+    {
+      conn.Close();
+    }
+
+    return allRestaurants;
+
+    }
+
+    public static Restaurant Find(int id)
+    {
       SqlConnection conn = DB.Connection();
       SqlDataReader rdr = null;
       conn.Open();
-      SqlCommand cmd = new SqlCommand("SELECT * FROM restaurant;", conn);
-            rdr = cmd.ExecuteReader();
+
+      SqlCommand cmd = new SqlCommand("SELECT * FROM restaurant WHERE id = @RestaurantId;", conn);
+      SqlParameter restaurantIdParameter = new SqlParameter();
+      restaurantIdParameter.ParameterName = "@RestaurantId";
+      restaurantIdParameter.Value = id.ToString();
+      cmd.Parameters.Add(restaurantIdParameter);
+      rdr = cmd.ExecuteReader();
+
+      int foundRestaurantId = 0;
+      string foundRestaurantName = null;
+      string foundRestaurantAddress = null;
+      string foundRestaurantPhoneNumber = null;
+      int foundCuisineId = 0;
 
       while(rdr.Read())
       {
-        int restaurantId = rdr.GetInt32(0);
-        string name = rdr.GetString(1);
-        string address = rdr.GetString(2);
-        string phoneNumber = rdr.GetString(3);
-        int cusineId = rdr.GetInt32(4);
-        Restaurant newRestaurant = new Restaurant(name, address, phoneNumber, cusineId);
-        allRestaurants.Add(newRestaurant);
+        foundRestaurantId = rdr.GetInt32(0);
+        foundRestaurantName = rdr.GetString(1);
+        foundRestaurantAddress = rdr.GetString(2);
+        foundRestaurantPhoneNumber = rdr.GetString(3);
+        foundCuisineId = rdr.GetInt32(4);
       }
+      Restaurant foundRestaurant = new Restaurant(foundRestaurantName, foundRestaurantAddress, foundRestaurantPhoneNumber, foundCuisineId, foundRestaurantId);
 
-      if (rdr != null)
-      {
-        rdr.Close();
-      }
-      if (conn != null)
-      {
-        conn.Close();
-      }
+    if (rdr != null)
+    {
+      rdr.Close();
+    }
+    if (conn != null)
+    {
+      conn.Close();
+    }
+    return foundRestaurant;
 
-      return allRestaurants;
-
-      }
+    }
   }
 }

@@ -47,6 +47,36 @@ namespace RestaurantNamespace
       Assert.Equal(testList, result);
     }
 
+    [Fact]
+    public void Test_To_Assign_ID()
+    {
+      //Arrange, Act
+      Restaurant restaurant = new Restaurant("Red Lobster", "SW Funtime Lane", "503-555-5555", 3);
+
+      restaurant.Save();
+      Restaurant savedRestaurant = Restaurant.GetAll()[0];
+
+      int testID = restaurant.getID();
+      int result = savedRestaurant.getID();
+
+      //Assert
+      Assert.Equal(testID, result);
+    }
+    [Fact]
+    public void Test_Find_FindsRestaurantInDatabase()
+    {
+      //Arrange
+      Restaurant testRestaurant = new Restaurant("Red Lobster", "SW Funtime Lane", "503-555-5555", 3);
+      testRestaurant.Save();
+
+      //Act
+      Restaurant foundRestaurant = Restaurant.Find(testRestaurant.getID());
+
+      //Assert
+      Assert.Equal(testRestaurant, foundRestaurant);
+    }
+
+
     public void Dispose()
     {
       Restaurant.DeleteAll();
