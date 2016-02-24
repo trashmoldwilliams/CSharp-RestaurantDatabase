@@ -147,5 +147,40 @@ namespace RestaurantNamespace
       }
       return foundCuisine;
     }
-  }
+
+    public List<Restaurant> GetRestaurants()
+      {
+        SqlConnection conn = DB.Connection();
+        SqlDataReader rdr = null;
+        conn.Open();
+
+        SqlCommand cmd = new SqlCommand("SELECT * FROM restaurant WHERE cusine_id = @CuisineId;", conn);
+        SqlParameter cuisineIdParameter = new SqlParameter();
+        cuisineIdParameter.ParameterName = "@CuisineId";
+        cuisineIdParameter.Value = this.GetId();
+        cmd.Parameters.Add(cuisineIdParameter);
+        rdr = cmd.ExecuteReader();
+
+        List<Restaurant> restaurants = new List<Restaurant> {};
+        while(rdr.Read())
+        {
+          int restaurantId = rdr.GetInt32(0);
+          string name = rdr.GetString(1);
+          string address = rdr.GetString(2);
+          string phoneNumber = rdr.GetString(3);
+          int cusineId = rdr.GetInt32(4);
+          Restaurant newRestaurant = new Restaurant(name, address, phoneNumber, cusineId, restaurantId);
+          restaurants.Add(newRestaurant);
+        }
+        if (rdr != null)
+        {
+          rdr.Close();
+        }
+        if (conn != null)
+        {
+          conn.Close();
+        }
+        return restaurants;
+      }
+   }
 }
