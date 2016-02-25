@@ -76,6 +76,57 @@ namespace RestaurantNamespace
       Assert.Equal(testRestaurant, foundRestaurant);
     }
 
+    [Fact]
+
+    public void Test_Update_UpdatesCuisineInDatabase()
+    {
+      string name1 = "Thai";
+      Cuisine testCuisine1 = new Cuisine(name1);
+      testCuisine1.Save();
+      //Arrange
+      string name = "RedLobster";
+      Restaurant testRestaurant = new Restaurant(name, "happyStreet", "333444343", testCuisine1.GetId());
+      testRestaurant.Save();
+      string newName = "GreenLobster";
+
+      //Act
+      testRestaurant.UpdateName(newName);
+
+      string result = testRestaurant.getName();
+
+      //Assert
+      Assert.Equal(newName, result);
+    }
+
+    [Fact]
+    public void Test_Delete_DeletesRestaurantFromDatabase()
+    {
+      //Arrange
+      string name1 = "Thai";
+      Cuisine testCuisine1 = new Cuisine(name1);
+      testCuisine1.Save();
+
+      string name2 = "Italian";
+      Cuisine testCuisine2 = new Cuisine(name2);
+      testCuisine2.Save();
+
+      Restaurant testRestaurants1 = new Restaurant("RedLobster", "happyStreet", "333444343", testCuisine1.GetId());
+      testRestaurants1.Save();
+      Restaurant testRestaurants2 = new Restaurant("GreenLobster", "happyStreet", "333444343", testCuisine2.GetId());
+      testRestaurants2.Save();
+
+      //Act
+      testRestaurants1.Delete();
+      // List<Cuisine> resultCuisines = Cuisine.GetAll();
+      // List<Cuisine> testCuisineList = new List<Cuisine> {testCuisine2};
+
+      List<Restaurant> resultRestaurants = Restaurant.GetAll();
+      List<Restaurant> testRestaurantsList = new List<Restaurant> {testRestaurants2};
+
+      //Assert
+      // Assert.Equal(testCuisineList, resultCuisines);
+      Assert.Equal(testRestaurantsList, resultRestaurants);
+    }
 
     public void Dispose()
     {

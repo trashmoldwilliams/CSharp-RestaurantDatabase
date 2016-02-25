@@ -9,15 +9,16 @@ else
   <ol>
     @foreach (var restaurants in @Model["restaurants"])
     {
-      <li>@restaurants.getName()
+      <li>@restaurants.getName() | <a href = "/restaurants/edit/@restaurants.getID()">Edit</a> | <a href = "/restaurant/delete/@restaurants.getID()">Delete</a>
         <ul>
           <li>Address: @restaurants.getAddress()</li>
           <li>Phone Number: @restaurants.getPhoneNumber()</li>
         </ul>
       </li>
+
     }
   </ol>
 }
 <p><a href="/restaurants/new">Add a new restaurant</a></p>
-<a href="/restraunts/delete">Delete all restraunts of this cuisine</a>
+<a href="/restaurants/delete">Delete all restraunts of this cuisine</a>
 <p><a href="/">Return to Main Page</a></p>

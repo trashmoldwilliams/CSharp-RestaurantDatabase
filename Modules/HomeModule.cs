@@ -39,12 +39,12 @@ namespace RestaurantNamespace
         return View["success.cshtml"];
       };
 
-      Post["/restaurants/delete"] = _ => {
+      Get["/restaurants/delete"] = _ => {
         Restaurant.DeleteAll();
         return View["success.cshtml"];
       };
 
-      Post["/cuisines/delete"] = _ => {
+      Get["/cuisines/delete"] = _ => {
         Cuisine.DeleteAll();
         return View["success.cshtml"];
       };
@@ -56,6 +56,48 @@ namespace RestaurantNamespace
         model.Add("cuisine", SelectedCuisine);
         model.Add("restaurants", CuisineRestaurants);
         return View["cuisine.cshtml", model];
+      };
+
+      Get["/cuisine/edit/{id}"] = parameters => {
+        Cuisine SelectedCuisine = Cuisine.Find(parameters.id);
+        return View["cuisine_edit.cshtml", SelectedCuisine];
+      };
+
+      Patch["/cuisine/edit/{id}"] = parameters => {
+      Cuisine SelectedCuisine = Cuisine.Find(parameters.id);
+      SelectedCuisine.Update(Request.Form["cuisine-name"]);
+      return View["success.cshtml"];
+      };
+
+      Get["/cuisine/delete/{id}"] = parameters => {
+        Cuisine SelectedCuisine = Cuisine.Find(parameters.id);
+        return View["cuisine_delete.cshtml", SelectedCuisine];
+      };
+
+      Delete["/cuisine/delete/{id}"] = parameters => {
+        Cuisine SelectedCuisine = Cuisine.Find(parameters.id);
+        SelectedCuisine.Delete();
+        return View["success.cshtml"];
+      };
+      Get["/restaurants/edit/{id}"] = parameters => {
+        Restaurant SelectedRestaurant = Restaurant.Find(parameters.id);
+        return View["restaurant_edit.cshtml", SelectedRestaurant];
+      };
+      Patch["/restaurants/edit/{id}"] = parameters => {
+        Restaurant SelectedRestaurant = Restaurant.Find(parameters.id);
+        SelectedRestaurant.UpdateName(Request.Form["edit"]);
+        return View["success.cshtml"];
+      };
+
+      Get["/restaurant/delete/{id}"] = parameters => {
+        Restaurant SelectedRestaurant = Restaurant.Find(parameters.id);
+        return View["restaurant_delete.cshtml", SelectedRestaurant];
+      };
+
+      Delete["/restaurant/delete/{id}"] = parameters => {
+        Restaurant SelectedRestaurant = Restaurant.Find(parameters.id);
+        SelectedRestaurant.Delete();
+        return View["success.cshtml"];
       };
     }
   }
