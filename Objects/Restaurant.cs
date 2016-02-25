@@ -150,6 +150,84 @@ namespace RestaurantNamespace
     }
 
     return allRestaurants;
+    }
+
+    public List<Review> GetAllReviews()
+    {
+      List<Review> allReviews = new List<Review>{};
+
+
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr = null;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT * FROM reviews WHERE restaurant_id = @restaurantId;", conn);
+      SqlParameter reviewIdParameter = new SqlParameter();
+      reviewIdParameter.ParameterName = "@restaurantId";
+      reviewIdParameter.Value = this.getID();
+      cmd.Parameters.Add(reviewIdParameter);
+
+      rdr = cmd.ExecuteReader();
+
+      while(rdr.Read())
+      {
+        int regularId = rdr.GetInt32(0);
+        int restaurantId = rdr.GetInt32(1);
+        int stars = rdr.GetInt32(2);
+
+        Review newReview = new Review(stars, restaurantId, regularId);
+
+        allReviews.Add(newReview);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+
+      // int 1stars = 0;
+      // int 2stars = 0;
+      // int 3stars = 0;
+      // int 4stars = 0;
+      // int 5stars = 0;
+      //
+      // for(var i = 0; i<=allReviews.length; i++)
+      // {
+      //   if(allReview[i].getStars() == 1)
+      //   {
+      //     1stars +=1
+      //   }
+      //   if(allReview[i].getStars() == 2)
+      //   {
+      //     1stars +=1
+      //   }
+      //   if(allReview[i].getStars() == 3)
+      //   {
+      //     1stars +=1
+      //   }
+      //   if(allReview[i].getStars() == 4)
+      //   {
+      //     1stars +=1
+      //   }
+      //   if(allReview[i].getStars() == 5)
+      //   {
+      //     1stars +=1
+      //   }
+      // }
+      //
+      // List<int> reviewStars = new List<int>{};
+      // reviewStars.Add(1stars);
+      // reviewStars.Add(2stars);
+      // reviewStars.Add(3stars);
+      // reviewStars.Add(4stars);
+      // reviewStars.Add(5stars);
+
+
+      return allReviews;
+      // return reviewStars;
 
     }
 
@@ -206,7 +284,6 @@ namespace RestaurantNamespace
       newNameParameter.ParameterName = "@NewName";
       newNameParameter.Value = newName;
       cmd.Parameters.Add(newNameParameter);
-
 
       SqlParameter restaurantIdParameter = new SqlParameter();
       restaurantIdParameter.ParameterName = "@restaurantId";

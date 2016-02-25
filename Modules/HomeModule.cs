@@ -53,6 +53,7 @@ namespace RestaurantNamespace
         Dictionary<string, object> model = new Dictionary<string, object>();
         var SelectedCuisine = Cuisine.Find(parameters.id);
         var CuisineRestaurants = SelectedCuisine.GetRestaurants();
+        // var RestaurantReviews =
         model.Add("cuisine", SelectedCuisine);
         model.Add("restaurants", CuisineRestaurants);
         return View["cuisine.cshtml", model];
@@ -97,6 +98,19 @@ namespace RestaurantNamespace
       Delete["/restaurant/delete/{id}"] = parameters => {
         Restaurant SelectedRestaurant = Restaurant.Find(parameters.id);
         SelectedRestaurant.Delete();
+        return View["success.cshtml"];
+      };
+
+      Get["/restaurant/{id}/reviews"] = parameters => {
+        Restaurant SelectedRestaurant = Restaurant.Find(parameters.id);
+        return View["review_form.cshtml", SelectedRestaurant];
+      };
+
+      Post["/restaurant/{id}/reviews"] = parameters => {
+        Restaurant SelectedRestaurant = Restaurant.Find(parameters.id);
+        int id = SelectedRestaurant.getID();
+        Review newReview = new Review(Request.Form["reviewNumber"], id);
+        newReview.Save();
         return View["success.cshtml"];
       };
     }

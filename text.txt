@@ -1,0 +1,4 @@
+@foreach(var review in @restaurants.GetAllReviews())
+{
+<li>@review</li>
+}

@@ -131,6 +131,7 @@ namespace RestaurantNamespace
     public void Dispose()
     {
       Restaurant.DeleteAll();
+      Cuisine.DeleteAll();
     }
   }
 }

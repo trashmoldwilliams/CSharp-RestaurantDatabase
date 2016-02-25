@@ -1,0 +1,18 @@
+@Html.Partial("header.cshtml")
+
+
+<div class="container">
+<h1>Add new review</h1>
+  <form action="/restaurant/@Model.getID()/reviews" method="post">
+    <label for="Review-Name">Cuisine name</label>
+    <!-- <input id="cuisine-name" name="cuisine-name" type="text"> -->
+    <select name = "reviewNumber" type="text">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    </select>
+    <button type="submit">Submit Review</button>
+  </form>
+</div>

@@ -1,9 +1,13 @@
-<h1>Restaurant</h1>
-<hr/>
-<h2>Are you sure you want to delete this restaurant?</h2>
-<h4>@Model.getName()</h4>
-<form action="/restaurant/delete/@Model.getID()" method="post">
-  <input type="hidden" name="_method" value="DELETE">
-  <button type="submit">Delete</button>
-</form>
-<p><a href="/">Back home</a></p>
+@Html.Partial("header.cshtml")
+
+<div class="container">
+  <h1>Restaurant</h1>
+  <hr/>
+  <h2>Are you sure you want to delete this restaurant?</h2>
+  <h4>@Model.getName()</h4>
+  <form action="/restaurant/delete/@Model.getID()" method="post">
+    <input type="hidden" name="_method" value="DELETE">
+    <button type="submit">Delete</button>
+  </form>
+  <p><a href="/">Back home</a></p>
+</div>

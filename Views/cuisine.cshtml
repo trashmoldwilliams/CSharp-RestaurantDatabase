@@ -1,24 +1,34 @@
-<h2>Here are all the @Model["cuisine"].GetName() restaurants:</h2>
+@Html.Partial("header.cshtml")
 
-@if (@Model["restaurants"].Count == 0)
-{
-  <p>No restaurants have been added yet!</p>
-}
-else
-{
-  <ol>
-    @foreach (var restaurants in @Model["restaurants"])
-    {
-      <li>@restaurants.getName() | <a href = "/restaurants/edit/@restaurants.getID()">Edit</a> | <a href = "/restaurant/delete/@restaurants.getID()">Delete</a>
-        <ul>
-          <li>Address: @restaurants.getAddress()</li>
-          <li>Phone Number: @restaurants.getPhoneNumber()</li>
-        </ul>
-      </li>
+<div class="container">
+  <h2>Here are all the @Model["cuisine"].GetName() restaurants:</h2>
 
-    }
-  </ol>
-}
-<p><a href="/restaurants/new">Add a new restaurant</a></p>
-<a href="/restaurants/delete">Delete all restraunts of this cuisine</a>
-<p><a href="/">Return to Main Page</a></p>
+  @if (@Model["restaurants"].Count == 0)
+  {
+    <p>No restaurants have been added yet!</p>
+  }
+  else
+  {
+    <ol>
+      @foreach (var restaurants in @Model["restaurants"])
+      {
+        <li>@restaurants.getName() | <a href = "/restaurants/edit/@restaurants.getID()">Edit</a> | <a href = "/restaurant/delete/@restaurants.getID()">Delete</a>
+          <ul>
+            <li>Address: @restaurants.getAddress()</li>
+            <li>Phone Number: @restaurants.getPhoneNumber()</li>
+            @foreach(var review in @restaurants.GetAllReviews())
+            {
+            <li>@review.getStars()</li>
+            }
+            <li><a href = "/restaurant/@restaurants.getID()/reviews">Leave Review</a></li>
+          </ul>
+        </li>
+
+      }
+    </ol>
+  }
+  <p><a href="/restaurants/new">Add a new restaurant</a></p>
+  <p><a href="/restaurants/delete">Delete all restraunts of this cuisine</a></p>
+
+  <p><a href="/">Return to Main Page</a></p>
+  </div>
